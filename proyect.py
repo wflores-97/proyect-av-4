@@ -65,3 +65,59 @@ if __name__ == "__main__":
     posicion_final = (len(laberinto) - 1, len(laberinto[0]) - 1)
 
     main_loop(laberinto, posicion_inicial, posicion_final)
+
+
+import os
+import random
+
+class Juego:
+    def __init__(self, mapa, posicion_inicial, posicion_final):
+        self.mapa = mapa
+        self.posicion_inicial = posicion_inicial
+        self.posicion_final = posicion_final
+
+    def mostrar_mapa(self):
+        for fila in self.mapa:
+            print(fila)
+
+    def mover(self, direccion):
+        # Lógica para moverse en la dirección proporcionada
+        pass
+
+    def verificar_victoria(self):
+        # Lógica para verificar si el jugador ha alcanzado la posición final
+        pass
+
+# Subclase JuegoArchivo que hereda de Juego
+class JuegoArchivo(Juego):
+    def __init__(self, path_a_mapas):
+        # Seleccionar un archivo aleatorio de la carpeta de mapas
+        nombre_archivo = random.choice(os.listdir(path_a_mapas))
+        path_completo = os.path.join(path_a_mapas, nombre_archivo)
+
+        # Llamar al constructor de la clase base (Juego) con los datos del archivo
+        super().__init__(*self.leer_mapa_desde_archivo(path_completo))
+
+    def leer_mapa_desde_archivo(self, path_archivo):
+        with open(path_archivo, 'r') as archivo:
+            # Leer las dimensiones del mapa y las coordenadas iniciales y finales
+            dimensiones = archivo.readline().strip().split(',')
+            filas, columnas = int(dimensiones[0]), int(dimensiones[1])
+            inicio = archivo.readline().strip().split(',')
+            fin = archivo.readline().strip().split(',')
+
+            # Leer las filas del mapa
+            mapa = [archivo.readline().strip() for _ in range(filas)]
+
+        return mapa, (int(inicio[0]), int(inicio[1])), (int(fin[0]), int(fin[1]))
+
+# Uso de las clases en el main
+if __name__ == "__main__":
+    # Crear una instancia de JuegoArchivo con la carpeta de mapas como argumento
+    juego_archivo = JuegoArchivo("carpeta_de_mapas")
+
+    # Acceder a los atributos de la instancia
+    print("Mapa:")
+    juego_archivo.mostrar_mapa()
+    print("Posición Inicial:", juego_archivo.posicion_inicial)
+    print("Posición Final:", juego_archivo.posicion_final)
